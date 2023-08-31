@@ -25,11 +25,14 @@
 
 namespace Techyouknow\SocialLogin\Api\Data;
 
-
+/**
+ * Interface SocialNetworkCustomer
+ * @package Techyouknow\SocialLogin\Api\Data
+ */
 interface SocialNetworkCustomer
 {
     const TABLE_NAME = 'tyk_sociallogin_customer';
-
+    
     const ENTITY_ID = 'entity_id';
     const SOCIAL_ID = 'social_id';
     const CUSTOMER_ID = 'customer_id';
@@ -102,5 +105,4 @@ interface SocialNetworkCustomer
      * @return mixed
      */
     public function setUpdatedAt($updatedAt);
-
 }

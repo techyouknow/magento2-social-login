@@ -23,58 +23,58 @@
  * SOFTWARE.
  */
 
-namespace Techyouknow\SocialLogin\Controller\Social;
+ namespace Techyouknow\SocialLogin\Controller\Social;
 
-use Magento\Framework\App\Action\Context;
-
-class Login extends \Magento\Framework\App\Action\Action
-{
-
-    private $resultRawFactory;
-    private $socialModel;
-    private $customerRepository;
-    private $customerModelFactory;
-    private $socialNetworkCustomerRepository;
-
-    public function __construct(
-        Context $context,
-        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
-        \Techyouknow\SocialLogin\Model\Social $socialModel,
-        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
-        \Magento\Customer\Model\CustomerFactory $customerModelFactory,
-        \Techyouknow\SocialLogin\Api\SocialNetworkCustomerRepositoryInterface $socialNetworkCustomerRepository
-    )
-    {
-        parent::__construct($context);
-        $this->resultRawFactory = $resultRawFactory;
-        $this->socialModel = $socialModel;
-        $this->customerRepository = $customerRepository;
-        $this->customerModelFactory = $customerModelFactory;
-        $this->socialNetworkCustomerRepository = $socialNetworkCustomerRepository;
-    }
+ use Magento\Framework\App\Action\Context;
+ use Magento\Framework\Controller\Result\RawFactory;
+ use Techyouknow\SocialLogin\Model\Social;
+ use Magento\Customer\Api\CustomerRepositoryInterface;
+ use Magento\Customer\Model\CustomerFactory;
+ use Techyouknow\SocialLogin\Api\SocialNetworkCustomerRepositoryInterface;
+ 
+ class Login extends \Magento\Framework\App\Action\Action
+ {
+     private $resultRawFactory;
+     private $socialModel;
+     private $customerRepository;
+     private $customerModelFactory;
+     private $socialNetworkCustomerRepository;
+ 
+     public function __construct(
+         Context $context,
+         RawFactory $resultRawFactory,
+         Social $socialModel,
+         CustomerRepositoryInterface $customerRepository,
+         CustomerFactory $customerModelFactory,
+         SocialNetworkCustomerRepositoryInterface $socialNetworkCustomerRepository
+     )
+     {
+         parent::__construct($context);
+         $this->resultRawFactory = $resultRawFactory;
+         $this->socialModel = $socialModel;
+         $this->customerRepository = $customerRepository;
+         $this->customerModelFactory = $customerModelFactory;
+         $this->socialNetworkCustomerRepository = $socialNetworkCustomerRepository;
+     }
 
     public function execute()
     {
         $adapterId = $this->getRequest()->getParam('provider');
-
+        
         try {
             $userProfile = $this->socialModel->getSocialUserProfile($adapterId);
             $customer = $this->customerRepository->get($userProfile['email']);
-            if(isset($customer) && $customer->getId()) {
-                // Get Customer Entity Model
-                $customerModel = $this->customerModelFactory->create()->load($customer->getId());
 
-                // Create new social network customer entity
+            if(isset($customer) && $customer->getId()) {
+                $customerModel = $this->customerModelFactory->create()->load($customer->getId());
+                
                 if(!$this->socialNetworkCustomerRepository->socialNetworkCustomerExists($userProfile, $adapterId)) {
                     $this->socialModel->createSocialLoginCustomer($userProfile, $adapterId, $customer->getId());
                 }
             }
-        }
-        catch(\Magento\Framework\Exception\NoSuchEntityException $e) {
-            // Create new Customer account
+        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             $customerModel = $this->socialModel->createCustomerAccount($userProfile, $adapterId);
-        }
-        catch(\Exception $e){
+        } catch (\Exception $e) {
             exit("Error: " . $e->getMessage());
         }
 

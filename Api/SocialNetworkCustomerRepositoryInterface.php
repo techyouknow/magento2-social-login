@@ -25,26 +25,33 @@
 
 namespace Techyouknow\SocialLogin\Api;
 
-
+/**
+ * Interface SocialNetworkCustomerRepositoryInterface
+ * @package Techyouknow\SocialLogin\Api
+ */
 interface SocialNetworkCustomerRepositoryInterface
 {
-
     /**
-     * @param $id
+     * Get social network customer by ID.
+     *
+     * @param int $id
      * @return \Techyouknow\SocialLogin\Api\Data\SocialNetworkCustomer
      */
     public function getById($id);
 
     /**
+     * Save social network customer.
+     *
      * @param \Techyouknow\SocialLogin\Api\Data\SocialNetworkCustomer $socialNetworkCustomer
-     * @return mixed
+     * @return void
      */
     public function save(\Techyouknow\SocialLogin\Api\Data\SocialNetworkCustomer $socialNetworkCustomer);
 
     /**
+     * Delete social network customer.
+     *
      * @param \Techyouknow\SocialLogin\Api\Data\SocialNetworkCustomer $socialNetworkCustomer
-     * @return mixed
+     * @return void
      */
     public function delete(\Techyouknow\SocialLogin\Api\Data\SocialNetworkCustomer $socialNetworkCustomer);
-
 }

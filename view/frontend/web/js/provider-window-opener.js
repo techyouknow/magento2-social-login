@@ -23,8 +23,9 @@
  */
 
 define([
-    'jquery'
-], function($) {
+    'jquery',
+    'Magento_Customer/js/customer-data'
+], function($, customerData) {
     $('.social-login-container .block-content ul li a').click(function(e) {
         var provider = $(this).attr('class');
         var url = '/techyouknow_redirect/social/login/provider/' + provider;
@@ -37,6 +38,10 @@ define([
         var popupLeft = (screenWidth - popupWidth) / 2;
         var popupTop = (screenHeight - popupHeight) / 2;
 
+        // Clear customer data 
+        customerData.invalidate(['customer']);
+        customerData.reload(['customer'], true);
+        
         // Open the popup window with the calculated position
         var popupFeatures = "menubar=no, status=no, scrollbars=no, width=" + popupWidth + ", height=" + popupHeight + ", left=" + popupLeft + ", top=" + popupTop;
         window.open(url, "", popupFeatures);

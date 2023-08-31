@@ -25,29 +25,33 @@
 
 namespace Techyouknow\SocialLogin\Block;
 
-
 use Magento\Framework\View\Element\Template;
+use Techyouknow\SocialLogin\Helper\SocialHelper;
 
-class SocialBlock extends \Magento\Framework\View\Element\Template
+class SocialBlock extends Template
 {
-
     private $socialHelper;
+    private $isSocialLoginActive;
+    private $activeSocialNetworks;
 
     public function __construct(
         Template\Context $context,
-        \Techyouknow\SocialLogin\Helper\Social $socialHelper,
+        SocialHelper $socialHelper,
         array $data = []
-    )
-    {
+    ) {
         parent::__construct($context, $data);
         $this->socialHelper = $socialHelper;
+        $this->isSocialLoginActive = $this->socialHelper->isSocialNetworkEnable();
+        $this->activeSocialNetworks = $this->socialHelper->getActiveSocialNetworksList();
     }
 
-    public function IsSocialLoginActive() {
-        return $this->socialHelper->isSocialNetworkEnable();
+    public function isSocialLoginActive()
+    {
+        return $this->isSocialLoginActive;
     }
 
-    public function getEnabledSocialNetworks() {
-        return $this->socialHelper->getActiveSocialNetworksList();
+    public function getActiveSocialNetworks()
+    {
+        return $this->activeSocialNetworks;
     }
 }
