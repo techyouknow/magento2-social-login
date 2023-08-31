@@ -29,7 +29,7 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Config\Block\System\Config\Form\Field as FormField;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Exception\LocalizedException;
-use Techyouknow\SocialLogin\Helper\Social as SocialHelper;
+
 
 class RedirectUrl extends FormField
 {
@@ -39,14 +39,14 @@ class RedirectUrl extends FormField
      * RedirectUrl constructor.
      *
      * @param Context $context
-     * @param SocialHelper $socialHelper
      * @param array $data
      */
     public function __construct(
         Context $context,
-        SocialHelper $socialHelper,
+        \Techyouknow\SocialLogin\Helper\Social $socialHelper,
         array $data = []
     ) {
+
         parent::__construct($context, $data);
         $this->socialHelper = $socialHelper;
     }
@@ -62,7 +62,7 @@ class RedirectUrl extends FormField
         $elementId   = explode('_', $element->getHtmlId());
         $redirectUrl = $this->socialHelper->getSocialRedirectUrl($elementId[4]);
         $html = '<input style="opacity:1;" readonly id="' . $element->getHtmlId() . '" class="input-text admin__control-text" value="' . $redirectUrl . '" onclick="this.select()" type="text">';
-        
+
         return $html;
     }
 }
