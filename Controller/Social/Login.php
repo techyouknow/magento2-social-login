@@ -26,8 +26,12 @@
 namespace Techyouknow\SocialLogin\Controller\Social;
 
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\CsrfAwareActionInterface;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Request\InvalidRequestException;
 
-class Login extends \Magento\Framework\App\Action\Action
+
+class Login extends \Magento\Framework\App\Action\Action implements CsrfAwareActionInterface
 {
 
     private $resultRawFactory;
@@ -56,7 +60,6 @@ class Login extends \Magento\Framework\App\Action\Action
     public function execute()
     {
         $adapterId = $this->getRequest()->getParam('provider');
-
         try {
             $userProfile = $this->socialModel->getSocialUserProfile($adapterId);
             $customer = $this->customerRepository->get($userProfile['email']);
@@ -99,5 +102,22 @@ class Login extends \Magento\Framework\App\Action\Action
                 </script>");
 
         return $raw;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function createCsrfValidationException(
+        RequestInterface $request
+    ): ?InvalidRequestException {
+        return null; // Return null to use the default behavior
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
+        return true; // Return true to indicate that CSRF validation is successful
     }
 }

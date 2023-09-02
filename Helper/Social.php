@@ -107,6 +107,7 @@ class Social extends \Magento\Framework\App\Helper\AbstractHelper
                 $providerConfig['keys']['team_id'] = $this->getAdapterConfigValue($adapterId, self::CONFIG_TEAM_ID);
                 $providerConfig['keys']['key_id'] = $this->getAdapterConfigValue($adapterId, self::CONFIG_KEY_ID);
                 $providerConfig['keys']['key_content'] = $this->getAdapterConfigValue($adapterId, self::CONFIG_KEY_CONTENT);
+                $providerConfig['scope'] = 'name email';
             } else {
                 $providerConfig['keys']['secret'] = $this->getAdapterConfigValue($adapterId, self::CONFIG_APP_SECRET);
             }

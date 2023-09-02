@@ -133,7 +133,15 @@
                             <field id="enable">1</field>
                         </depends>
                     </field>
-                    <field id="redirect_uri" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="change_session" translate="label comment" type="select" sortOrder="50" showInDefault="1">
+                        <label>Enable Secure and SameSite Cookies</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <comment>Choose "Yes" to configure session cookies with session.cookie_samesite set to "None" and session.cookie_secure set to "1"</comment>
+                        <depends>
+                            <field id="enable">1</field>
+                        </depends>
+                    </field>
+                    <field id="redirect_uri" translate="label comment" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>URI Redirect</label>
                         <frontend_model>Techyouknow\SocialLogin\Block\System\RedirectUrl</frontend_model>
                         <depends>

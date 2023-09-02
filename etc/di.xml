@@ -29,5 +29,5 @@
 
     <preference for="Techyouknow\SocialLogin\Api\Data\SocialNetworkCustomer" type="Techyouknow\SocialLogin\Model\SocialLoginCustomer" />
     <preference for="Techyouknow\SocialLogin\Api\SocialNetworkCustomerRepositoryInterface" type="Techyouknow\SocialLogin\Model\Repository\SocialLoginCustomerRepository" />
-
+    <preference for="Magento\Framework\Session\Config" type="Techyouknow\SocialLogin\Model\Session\Config" />
 </config>
