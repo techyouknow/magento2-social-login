@@ -1,0 +1,30 @@
+<h2>Login successful!!!</h2>
+<style>
+:root body {
+    margin: 0;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+body h2 {
+    font-weight: bold;
+    margin: 0;
+}
+</style>
+<script>
+    require([
+        'jquery',
+        'Magento_Customer/js/customer-data'
+    ], function($, customerData) {
+        $(document).ready(function() {
+            setTimeout(() => {
+                customerData.invalidate(['customer']);
+                customerData.reload(['customer'], true);
+                window.opener.location.reload(true);
+                window.close();
+            }, 1500);
+        });
+    });
+</script>

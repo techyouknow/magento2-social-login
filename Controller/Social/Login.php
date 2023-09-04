@@ -92,7 +92,12 @@ class Login extends \Magento\Framework\App\Action\Action implements CsrfAwareAct
 
         $this->socialModel->refresh($customerModel);
 
-        return $this->_appendJs();
+        if($adapterId == 'apple') {
+            $this->_view->loadLayout(['custom_script']);
+            $this->_view->renderLayout();
+        } else {
+            return $this->_appendJs();
+        }
     }
 
     /**
