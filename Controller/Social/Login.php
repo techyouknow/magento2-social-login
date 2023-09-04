@@ -29,7 +29,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\CsrfAwareActionInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Request\InvalidRequestException;
-
+use Magento\Customer\Model\Session;
 
 class Login extends \Magento\Framework\App\Action\Action implements CsrfAwareActionInterface
 {
@@ -39,6 +39,7 @@ class Login extends \Magento\Framework\App\Action\Action implements CsrfAwareAct
     private $customerRepository;
     private $customerModelFactory;
     private $socialNetworkCustomerRepository;
+    private $customerSession;
 
     public function __construct(
         Context $context,
@@ -46,7 +47,9 @@ class Login extends \Magento\Framework\App\Action\Action implements CsrfAwareAct
         \Techyouknow\SocialLogin\Model\Social $socialModel,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \Magento\Customer\Model\CustomerFactory $customerModelFactory,
-        \Techyouknow\SocialLogin\Api\SocialNetworkCustomerRepositoryInterface $socialNetworkCustomerRepository
+        \Techyouknow\SocialLogin\Api\SocialNetworkCustomerRepositoryInterface $socialNetworkCustomerRepository,
+        \Techyouknow\SocialLogin\Helper\Social $socialHelper,
+        Session $customerSession
     )
     {
         parent::__construct($context);
@@ -55,11 +58,17 @@ class Login extends \Magento\Framework\App\Action\Action implements CsrfAwareAct
         $this->customerRepository = $customerRepository;
         $this->customerModelFactory = $customerModelFactory;
         $this->socialNetworkCustomerRepository = $socialNetworkCustomerRepository;
+        $this->socialHelper = $socialHelper;
+        $this->customerSession = $customerSession;
     }
 
     public function execute()
     {
         $adapterId = $this->getRequest()->getParam('provider');
+        if ($this->customerSession->isLoggedIn() || !$this->checkAdapterIdActive($adapterId)) {
+            $this->_redirect($this->customerSession->isLoggedIn() ? 'customer/account' : '/');
+            return;
+        }
         try {
             $userProfile = $this->socialModel->getSocialUserProfile($adapterId);
             $customer = $this->customerRepository->get($userProfile['email']);
@@ -102,6 +111,11 @@ class Login extends \Magento\Framework\App\Action\Action implements CsrfAwareAct
                 </script>");
 
         return $raw;
+    }
+
+    public function checkAdapterIdActive($adapterId) {
+        $activeSocialNetworkList = $this->socialHelper->getActiveSocialNetworksList();
+        return array_key_exists($adapterId, $activeSocialNetworkList);
     }
 
     /**
