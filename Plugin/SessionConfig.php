@@ -27,6 +27,7 @@ namespace Techyouknow\SocialLogin\Plugin;
 
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Session\Config as MagentoConfig;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class SessionConfig
 {
@@ -39,13 +40,18 @@ class SessionConfig
     ];
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * @var Http
      */
     private $request;
 
 
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        ScopeConfigInterface $scopeConfig,
         Http $request
     ) {
         $this->scopeConfig = $scopeConfig;
